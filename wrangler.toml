@@ -1,3 +1,9 @@
 name = "cloudflareworkers-study"
 main = "src/index.ts"
 compatibility_date = "2022-06-05"
+
+[vars]
+UPSTASH_REDIS_REST_URL = "https://global-concrete-marten-30388.upstash.io"
+
+# [vars - secrets] (add by: 'wrangler secret put')
+# UPSTASH_REDIS_REST_TOKEN = ****

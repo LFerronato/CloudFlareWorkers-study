@@ -1,30 +1,45 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `wrangler dev src/index.ts` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `wrangler publish src/index.ts --name my-worker` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Redis } from '@upstash/redis/cloudflare'
+import { listen, Router } from 'worktop'
 
-export interface Env {
-  // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-  // MY_KV_NAMESPACE: KVNamespace;
-  //
-  // Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-  // MY_DURABLE_OBJECT: DurableObjectNamespace;
-  //
-  // Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-  // MY_BUCKET: R2Bucket;
-}
+const routes = new Router()
 
-export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext
-  ): Promise<Response> {
-    return new Response("Hello World! 2\n\n" + new Date().toISOString());
-  },
-};
+const redis = new Redis({
+  url: UPSTASH_REDIS_REST_URL,
+  token: UPSTASH_REDIS_REST_TOKEN
+})
+
+routes.add('GET', '/', async (req, resp) => {
+  const access_count = await redis.get('access_count')
+
+  return resp.send(200, {
+    access_count,
+    query_MyNameIs: req.query.get('MyNameIs'),
+    others_routes: {
+      get_count: '/',
+      increase_count: '/count',
+      reset_count: '/reset',
+    },
+    cf: req.cf, // IncomingCloudflareProperties
+  })
+})
+
+const ROUTES_str = `
+
+  * get_count:      '/'
+  * increase_count: '/count'
+  * reset_count:    '/reset'
+`
+
+routes.add('GET', '/count', async (req, resp) => {
+  const access_count = await redis.incr('access_count')
+
+  return resp.send(200, 'new count: ' + access_count + ROUTES_str)
+})
+
+routes.add('GET', '/reset', async (req, resp) => {
+  const access_count = await redis.del('access_count')
+
+  return resp.send(200, 'new count: ' + access_count + ROUTES_str)
+})
+
+listen(routes.run)
