@@ -10,6 +10,15 @@
 **How does edge computing work?** <br>
 * Edge computing is all a matter of location. In traditional enterprise computing, data is produced at a client endpoint, such as a user's computer. That data is moved across a WAN such as the internet, through the corporate LAN, where the data is stored and worked upon by an enterprise application. Results of that work are then conveyed back to the client endpoint. This remains a proven and time-tested approach to client-server computing for most typical business applications.
 
+___ 
+### Use examples: 
+|||
+|---|---|
+|GET count:      | https://cloudflareworkers-study.lucas-fe-pelle.workers.dev/      |
+|GET increment:  | https://cloudflareworkers-study.lucas-fe-pelle.workers.dev/count |
+|GET reset count:| https://cloudflareworkers-study.lucas-fe-pelle.workers.dev/reset |
+|||
+
 ---
 ### using:
 * [Cloudflare Workers](https://workers.cloudflare.com)
