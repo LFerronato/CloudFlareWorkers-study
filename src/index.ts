@@ -25,6 +25,6 @@ export default {
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
-    return new Response("Hello World!");
+    return new Response("Hello World! 2\n\n" + new Date().toISOString());
   },
 };
