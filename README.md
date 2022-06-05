@@ -12,17 +12,20 @@
 
 ___ 
 ### Use examples: 
-|||
-|---|---|
+|route           | url                                                              |
+|---             | ---                                                              |
 |GET count:      | https://cloudflareworkers-study.lucas-fe-pelle.workers.dev/      |
 |GET increment:  | https://cloudflareworkers-study.lucas-fe-pelle.workers.dev/count |
 |GET reset count:| https://cloudflareworkers-study.lucas-fe-pelle.workers.dev/reset |
-|||
+
+> main advantage: incredible speed of response, related to Edge Computing, in which the function is executed as close as possible to the requester client.
+
+> response time for '/' is much faster than '/count' or '/reset', cause '/' is a read-only route.
 
 ---
 ### using:
 * [Cloudflare Workers](https://workers.cloudflare.com)
-* DB: 
+* [DB: Redis - from Upstash](https://upstash.com/)
 
 
 
